@@ -8,7 +8,7 @@ const posts = {
   async createPosts(req, res) {
     try {
       const { body } = req;
-      console.log(body);
+      // console.log(body);
       const createAt = handleLocalDate();
       if (body.content) {
         const newPost = await Posts.create({
@@ -29,7 +29,10 @@ const posts = {
   },
 
   async getPosts(req, res) {
-    const allPosts = await Posts.find();
+    const allPosts = await Posts.find().populate({
+      path: 'user',
+      select: 'name photo',
+    });
     handleSuccess(res, allPosts);
     res.end();
   },
@@ -40,7 +43,7 @@ const posts = {
     console.log(req.body);
     let { keyword, sortby, limit = 10, page = 1 } = req.body;
     let filter = keyword ? { content: new RegExp(`${keyword}`) } : {};
-    let sort = sortby === 'datetime_pub' ? { createAt: -1 } : { createAt: 1 };
+    let sort = sortby === 'asc' ? 'createAt' : '-createAt';
     if (page < 0) {
       page = 1;
     }

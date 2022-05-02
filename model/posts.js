@@ -3,7 +3,7 @@ const postsSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.ObjectId,
-      ref: 'users',
+      ref: 'user',
       required: [true, '貼文 ID 未填寫'],
     },
     tags: [

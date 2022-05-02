@@ -40,7 +40,7 @@ const posts = {
   // async findOne( req, res ) {},
 
   async search(req, res) {
-    console.log(req.body);
+    // console.log(req.body);
     let { keyword, sortby, limit = 10, page = 1 } = req.body;
     let filter = keyword ? { content: new RegExp(`${keyword}`) } : {};
     let sort = sortby === 'asc' ? 'createAt' : '-createAt';
@@ -50,12 +50,20 @@ const posts = {
     let skip = limit * (page - 1);
     try {
       const count = await Posts.find(filter).count();
-      const posts = await Posts.find(filter).sort(sort).skip(skip).limit(limit);
+      const posts = await Posts.find(filter)
+        .populate({
+          path: 'user',
+          select: 'name photo',
+        })
+        .sort(sort)
+        .skip(skip)
+        .limit(limit);
+      // console.log(posts);
       let resPosts = posts.map((item) => {
         return {
           postId: item._id,
-          userName: item.userName,
-          userPhoto: item.userPhoto,
+          userName: item.user.name,
+          userPhoto: item.user.photo,
           content: item.content,
           image: item.image,
           datetime_pub: item.createAt,

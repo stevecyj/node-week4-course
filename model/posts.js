@@ -24,7 +24,7 @@ const postsSchema = new mongoose.Schema(
     createAt: {
       type: Date,
       default: Date.now,
-      select: false,
+      select: true,
     },
     updateAt: {
       type: Date,

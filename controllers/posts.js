@@ -2,15 +2,17 @@ const handleSuccess = require('../service/handleSuccess');
 const handleError = require('../service/handleError');
 const handleLocalDate = require('../service/handleLocalDate');
 const Posts = require('../model/posts');
+const Users = require('../model/users');
 
 const posts = {
   async createPosts(req, res) {
     try {
       const { body } = req;
+      console.log(body);
       const createAt = handleLocalDate();
       if (body.content) {
         const newPost = await Posts.create({
-          name: body.name,
+          user: body.user,
           content: body.content,
           tags: body.tags,
           type: body.type,
